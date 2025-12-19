@@ -1,0 +1,31 @@
+{
+  "title": "Neon Drift",
+  "description": "A cinematic lo-fi palette pulsing with urban energy — from grit to glow.",
+  "moods": [
+    {
+      "name": "Gritty",
+      "color": "#D14747",
+      "audio": "/assets/media/audio/381_Gritty.m4a"
+    },
+    {
+      "name": "Tense",
+      "color": "#F57B51",
+      "audio": "/assets/media/audio/377_Tense.m4a"
+    },
+    {
+      "name": "Energetic",
+      "color": "#FFB84D",
+      "audio": "/assets/media/audio/373_Energetic.m4a"
+    },
+    {
+      "name": "Playful",
+      "color": "#78D3F8",
+      "audio": "/assets/media/audio/037_Playful.m4a"
+    },
+    {
+      "name": "Dark",
+      "color": "#2B2D42",
+      "audio": "/assets/media/audio/115_Dark.m4a"
+    }
+  ]
+}

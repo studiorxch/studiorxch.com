@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include head.html %}
+    <link rel="stylesheet" href="/assets/css/page.css" />
+    <link rel="stylesheet" href="/assets/css/drawer.css" />
+  </head>
+
+  <body>
+    {% include _drawer.html %}
+
+    <button id="logoBtn" class="logo-btn">
+      <img src="/assets/img/logos/studiorich-red.svg" />
+    </button>
+
+    <button id="drawerClose" class="drawer-close">&times;</button>
+
+    <div id="pageWrap" class="page-content">
+      <div class="page-inner">{{ content }}</div>
+    </div>
+
+    <script src="/assets/js/drawer.js"></script>
+  </body>
+</html>

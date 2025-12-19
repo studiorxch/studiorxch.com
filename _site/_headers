@@ -1,0 +1,7 @@
+# Prevent folder listing and block direct access
+/music/*
+  X-Robots-Tag: noindex
+  Access-Control-Allow-Origin: https://www.studiorich.shop
+  Cache-Control: no-store
+  Referrer-Policy: no-referrer
+  Content-Security-Policy: default-src 'none'

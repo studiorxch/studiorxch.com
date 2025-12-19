@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- _includes/head.html -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
+
+  <title>StudioRich — Live Lo-Fi Stream + Creative Engine | StudioRxch</title>
+  <meta
+    name="description"
+    content="Lo-fi music, ambient streams, and creative studio culture."
+  />
+  <meta name="author" content="StudioRich" />
+  <meta name="twitter:site" content="@studiorxch" />
+
+  
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="StudioRxch" />
+  <meta
+    property="og:title"
+    content="StudioRich — Live Lo-Fi Stream + Creative Engine"
+  />
+  <meta
+    property="og:description"
+    content="Lo-fi music, ambient streams, and creative studio culture."
+  />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:image" content="http://localhost:4000/assets/img/default-share.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+    name="twitter:title"
+    content="StudioRich — Live Lo-Fi Stream + Creative Engine"
+  />
+  <meta
+    name="twitter:description"
+    content="Lo-fi music, ambient streams, and creative studio culture."
+  />
+  <meta name="twitter:image" content="http://localhost:4000/assets/img/default-share.jpg" />
+  <meta
+    name="twitter:image:alt"
+    content="StudioRich — Live Lo-Fi Stream + Creative Engine"
+  />
+
+  <!-- Favicon + Theme -->
+  <link rel="icon" href="/assets/img/logos/favicon.ico" type="image/x-icon" />
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '');
+</script>
+
+</head>
+
+    <link rel="stylesheet" href="/assets/css/home.css" />
+    <link rel="stylesheet" href="/assets/css/drawer.css" />
+  </head>
+
+  <body>
+    <nav id="drawer" class="drawer">
+  <div class="drawer-bg"></div>
+  <div class="drawer-overlay"></div>
+
+  <div class="drawer-inner">
+    <!-- TOP -->
+    <ul class="drawer-nav">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/schedule/">Live Schedule</a></li>
+      <li><a href="https://goods.studiorich.shop">Store</a></li>
+      <li><a href="/library">Music Library</a></li>
+      <li><a href="/blog">Blog</a></li>
+    </ul>
+
+    <div class="drawer-divider"></div>
+
+    <!-- MIDDLE: META -->
+    <div class="drawer-meta">
+      <p>
+        StudioRich is a live lo-fi studio for late nights, focus, and quiet
+        presence.
+      </p>
+      <p class="muted">Built slowly. Broadcast quietly.</p>
+    </div>
+
+    <!-- BOTTOM: FOOTER -->
+    <div class="drawer-footer">
+      <p class="copyright">© 2025 StudioRich · Lo-Fi Lives Here</p>
+
+      <div class="drawer-social">
+        <a href="https://instagram.com/_studiorich"
+          ><img src="/assets/img/logos/instagram.svg"
+        /></a>
+        <a href="https://youtube.com/@studio-rich"
+          ><img src="/assets/img/logos/youtube.svg"
+        /></a>
+        <a href="https://soundcloud.com/studiorich"
+          ><img src="/assets/img/logos/soundcloud.svg"
+        /></a>
+        <a href="https://open.spotify.com/artist/55NPQkvFCSFrE7eZuzlzqT"
+          ><img src="/assets/img/logos/spotify.svg"
+        /></a>
+        <a href="https://tiktok.com/@studiorxch"
+          ><img src="/assets/img/logos/tiktok.svg"
+        /></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+    <button id="logoBtn" class="logo-btn">
+      <img src="/assets/img/logos/studiorich-red.svg" />
+    </button>
+
+    <button id="drawerClose" class="drawer-close">&times;</button>
+
+    <!-- ONLY thing that shifts -->
+    <div id="pageWrap" class="home-canvas"><div id="centerWrap">
+
+<div id="type-stage">
+  <img class="type-slide active" src="/assets/type/after-hours.svg" alt="After Hours" />
+
+<img class="type-slide" src="/assets/type/late-transmission.svg" alt="Late Transmission" />
+
+<img class="type-slide" src="/assets/type/jp-stamp.svg" alt="StudioRich stamp" />
+
+<img class="type-slide" src="/assets/type/1130-pm-est.svg" alt="11:30 PM EST" />
+
+<img class="type-slide" src="/assets/type/built-slowly.svg" alt="Built Slowly" />
+
+</div>
+
+  <svg id="moodline" viewBox="0 0 100 40" preserveAspectRatio="none">
+    <path id="moodPath" d="M0 20 Q 25 20, 50 20 T 100 20" stroke="#555" stroke-width="1" vector-effect="non-scaling-stroke" fill="none" />
+  </svg>
+
+  <div id="info-layer">
+    <div id="nowplaying-label">Now Playing</div>
+    <div id="track-title">“Live Lo-Fi broadcasts • Twitch &amp; YouTube”</div>
+  </div>
+
+</div>
+
+<div id="live-icons">
+  <a id="twitch-icon" href="https://www.twitch.tv/studiorich"><img src="/assets/img/logos/twitch.svg" /></a>
+  <a id="yt-icon" href="https://www.youtube.com/@Studio-Rich?sub_confirmation=1">
+  <img src="/assets/img/logos/youtube.svg" alt="Subscribe on YouTube" />
+</a>
+
+</div>
+<script>
+      const slides = document.querySelectorAll(".type-slide");
+      let i = 0;
+
+setInterval(() => {
+slides[i].classList.remove("active");
+i = (i + 1) % slides.length;
+slides[i].classList.add("active");
+}, 11000);
+
+  </script>
+
+<script>
+const path = document.getElementById("moodPath");
+let t = 0;
+
+function animateLine() {
+  const amp = 2 + Math.sin(t * 0.5) * 1.5;
+  const y = 20 + Math.sin(t) * amp;
+
+  path.setAttribute(
+    "d",
+    `M0 ${y} Q 25 ${20 - amp}, 50 ${y} T 100 ${20 + amp}`
+  );
+
+  t += 0.03;
+  requestAnimationFrame(animateLine);
+}
+
+animateLine();
+</script>
+
+</div>
+
+    <script src="/assets/js/drawer.js"></script>
+  </body>
+</html>

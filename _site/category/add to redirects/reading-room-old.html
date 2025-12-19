@@ -1,0 +1,46 @@
+<div class="reading-room">
+  {% include reading-room-hero.html %} {% assign posts =
+  site.categories["reading-room"] | sort: "date" | reverse %} {% for post in
+  posts %}
+  <div class="reading-room-entry">
+    <!-- your entry code -->
+
+    <div class="entry-left">
+      {% if post.chapter %}
+      <div class="entry-chapter">Week {{ post.chapter }}</div>
+      {% endif %}
+      <h2 class="entry-title">
+        {% if post.icon %}
+        <img
+          src="{{ post.icon }}"
+          alt="{{ post.title }} icon"
+          class="entry-icon"
+        />
+        {% endif %}
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </h2>
+
+      {% if post.description %}
+      <p class="entry-description">{{ post.description }}</p>
+      {% endif %}
+
+      <div class="entry-meta">
+        <span class="entry-date">{{ post.date | date: "%B %d, %Y" }}</span>
+        {% if post.tags %}
+        <span class="entry-tags"> – {{ post.tags | join: ", " }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="entry-thumbnail">
+      <a href="{{ post.url }}">
+        <img
+          src="{{ post.image | default: '/assets/img/placeholders/reading-room/?.webp' }}"
+          alt="{{ post.title }} thumbnail"
+        />
+      </a>
+    </div>
+    <!-- your entry code -->
+  </div>
+  {% endfor %}
+</div>

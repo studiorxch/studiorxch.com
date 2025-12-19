@@ -1,18 +1,15 @@
 ---
 layout: default
-title: About StudioRic
-permalink: /about/
-description: "Learn the story behind StudioRich - a lo-fi audio collective blending sound therapy and visual storytelling."
+title: Origins
+permalink: /origins/
+description: "The origins and evolving world of StudioRich."
 image: /assets/img/hero/origin-mascot-rx0-crazy-bad-hey-hero.webp
+
 redirect_from:
-  - /pages/about-us
   - /origin
-  - /pages/contact
   - /blogs/news/see-you-later-oscillator-early-access-now-on-bandcamp
   - /blogs/news/soft-served-dreams-pre-release-now-available
 ---
-
-
 
 <p class="image-caption">Our mascot in Whiteout RX-0 Mode — a lo-fi signal runner moving between memory and motion.</p>
 

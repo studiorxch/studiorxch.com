@@ -1,0 +1,83 @@
+{
+  "Soft Revival": {
+    "id": "soft-revival",
+    "title": "Soft Revival",
+    "artist": "StudioRich",
+    "cover": "/assets/img/playground/001.webp",
+    "background": "/assets/img/playground/001.webp",
+
+    "moods": [
+      {
+        "name": "warm_intro",
+        "color": "#FFE8A6",
+        "audio": "/audio/soft-revival/01-warm-intro.mp3",
+        "start": 0
+      },
+      {
+        "name": "peach_glow",
+        "color": "#F4C19E",
+        "audio": "/audio/soft-revival/02-peach-glow.mp3",
+        "start": 22
+      },
+      {
+        "name": "sky_calm",
+        "color": "#A7C7D9",
+        "audio": "/audio/soft-revival/03-sky-calm.mp3",
+        "start": 44
+      },
+      {
+        "name": "mint_breeze",
+        "color": "#B9F1B7",
+        "audio": "/audio/soft-revival/04-mint-breeze.mp3",
+        "start": 66
+      },
+      {
+        "name": "soft_dusk",
+        "color": "#F6E48A",
+        "audio": "/audio/soft-revival/05-soft-dusk.mp3",
+        "start": 88
+      }
+    ]
+  },
+
+  "Neon Drift": {
+    "id": "neon-drift",
+    "title": "Neon Drift",
+    "artist": "StudioRich",
+    "cover": "/assets/img/playground/002.webp",
+    "background": "/assets/img/playground/002.webp",
+
+    "moods": [
+      {
+        "name": "heatwave",
+        "color": "#D14747",
+        "audio": "/audio/neon-drift/01-heatwave.mp3",
+        "start": 0
+      },
+      {
+        "name": "orange_glow",
+        "color": "#F57B51",
+        "audio": "/audio/neon-drift/02-orange-glow.mp3",
+        "start": 20
+      },
+      {
+        "name": "amber_haze",
+        "color": "#FFB84D",
+        "audio": "/audio/neon-drift/03-amber-haze.mp3",
+        "start": 40
+      },
+      {
+        "name": "cool_lights",
+        "color": "#78D3F8",
+        "audio": "/audio/neon-drift/04-cool-lights.mp3",
+        "start": 60
+      },
+      {
+        "name": "nightfall",
+        "color": "#2B2D42",
+        "audio": "/audio/neon-drift/05-nightfall.mp3",
+        "start": 80
+      }
+    ]
+  }
+}

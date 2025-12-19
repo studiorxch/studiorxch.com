@@ -1,0 +1,175 @@
+<!-- /_layouts/default.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- _includes/head.html -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
+
+  <title>StudioRich | Sunday Schedule | StudioRxch</title>
+  <meta
+    name="description"
+    content="Join us for StudioRich's sunday livestream - lo-fi sound therapy and creative sessions every week."
+  />
+  <meta name="author" content="StudioRich" />
+  <meta name="twitter:site" content="@studiorxch" />
+
+  
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="StudioRxch" />
+  <meta
+    property="og:title"
+    content="StudioRich | Sunday Schedule"
+  />
+  <meta
+    property="og:description"
+    content="Join us for StudioRich's sunday livestream - lo-fi sound therapy and creative sessions every week."
+  />
+  <meta property="og:url" content="http://localhost:4000/schedule/sunday" />
+  <meta property="og:image" content="http://localhost:4000/assets/img/default-share.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+    name="twitter:title"
+    content="StudioRich | Sunday Schedule"
+  />
+  <meta
+    name="twitter:description"
+    content="Join us for StudioRich's sunday livestream - lo-fi sound therapy and creative sessions every week."
+  />
+  <meta name="twitter:image" content="http://localhost:4000/assets/img/default-share.jpg" />
+  <meta
+    name="twitter:image:alt"
+    content="StudioRich | Sunday Schedule"
+  />
+
+  <!-- Favicon + Theme -->
+  <link rel="icon" href="/assets/img/logos/favicon.ico" type="image/x-icon" />
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '');
+</script>
+
+</head>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+  </head>
+
+  <body>
+    <div class="layout-wrapper">
+      <main class="site-main" role="main"><section class="hero" style="background-image: url(/assets/img/hero/spa-therapy-vinyl-record-hero.webp);">
+  <div class="hero-overlay">
+    
+    <h1>Sundays</h1>
+    
+      <p class="hero-subtitle">A Lo-Fi Sonic Massage Experience</p>
+    
+  </div>
+</section>
+
+<div class="youtube-carousel-wrapper">
+  <button class="carousel-arrow left" onclick="scrollCarousel(-1)">
+    <img src="/assets/ui/arrow-left.svg" alt="Left" class="arrow-icon" />
+  </button>
+  <div class="youtube-carousel" id="youtubeCarousel">
+     
+    <iframe src="https://www.youtube.com/embed/3_U9pLLI6Tk?si=BYnfC3PxRpDiQJ_r" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" loading="lazy"></iframe>
+    
+    <iframe src="https://www.youtube.com/embed/u5tCaLsFW-M?si=WmKxX14EHcumI1Tf" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" loading="lazy"></iframe>
+    
+    <iframe src="https://www.youtube.com/embed/d_ERqZwROAk?si=94CKxDrn897Bssoi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" loading="lazy"></iframe>
+    
+    <iframe src="https://www.youtube.com/embed/vKIr3HJiAVo?si=tA7LJDEHNItI64PV" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" loading="lazy"></iframe>
+    
+  </div>
+  <button class="carousel-arrow right" onclick="scrollCarousel(1)">
+    <img src="/assets/ui/arrow-right.svg" alt="Right" class="arrow-icon" />
+  </button>
+</div>
+
+<style>
+  .youtube-carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .youtube-carousel {
+    display: flex;
+    overflow: hidden;
+    gap: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .youtube-carousel iframe {
+    flex: 0 0 320px;
+    height: 180px;
+    border-radius: 12px;
+    border: none;
+  }
+
+  .carousel-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 1rem;
+    z-index: 1;
+  }
+
+  .arrow-icon {
+    height: 64px;
+    width: 64px;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+  }
+
+  .arrow-icon:hover {
+    filter: brightness(1.5);
+  }
+
+  .carousel-arrow.left {
+    position: absolute;
+    left: 0;
+  }
+
+  .carousel-arrow.right {
+    position: absolute;
+    right: 0;
+  }
+</style>
+
+<script>
+  function scrollCarousel(direction) {
+    const carousel = document.getElementById("youtubeCarousel");
+    const scrollAmount = 340; // including gap
+    carousel.scrollBy({
+      left: scrollAmount * direction,
+      behavior: "smooth",
+    });
+  }
+</script>
+
+</main>
+    </div>
+
+    <!-- Subscribe Form (safe + passive) -->
+    <script src="/assets/js/subscribe-form.js" defer></script>
+  </body>
+</html>

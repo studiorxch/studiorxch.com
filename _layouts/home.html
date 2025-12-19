@@ -2,27 +2,22 @@
 <html lang="en">
   <head>
     {% include head.html %}
-    <link rel="stylesheet" href="/assets/css/homepage.css" />
+    <link rel="stylesheet" href="/assets/css/home.css" />
     <link rel="stylesheet" href="/assets/css/drawer.css" />
   </head>
 
   <body>
     {% include _drawer.html %}
 
-    <!-- MUST be directly after drawer -->
-    <div id="pageWrap" class="page-wrap">
-      <main id="studio-app">{{ content }}</main>
-    </div>
+    <button id="logoBtn" class="logo-btn">
+      <img src="/assets/img/logos/studiorich-red.svg" />
+    </button>
 
-    <script>
-      const drawer = document.getElementById("drawer");
-      const pageWrap = document.getElementById("pageWrap");
-      const btn = document.getElementById("drawerToggle");
+    <button id="drawerClose" class="drawer-close">&times;</button>
 
-      btn.addEventListener("click", () => {
-        drawer.classList.toggle("open");
-        pageWrap.classList.toggle("shifted");
-      });
-    </script>
+    <!-- ONLY thing that shifts -->
+    <div id="pageWrap" class="home-canvas">{{ content }}</div>
+
+    <script src="/assets/js/drawer.js"></script>
   </body>
 </html>

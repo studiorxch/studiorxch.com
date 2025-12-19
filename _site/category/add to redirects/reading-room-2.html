@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reading Room</title>
+    <style>
+      :root {
+        --bg-1: #0f1115; /* start gradient */
+        --bg-2: #1a2230; /* end gradient */
+        --accent: #e5e7eb; /* text */
+        --muted: #9aa4b2;
+        --bar: #8b5cf6; /* timer bar */
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter,
+          sans-serif;
+        color: var(--accent);
+        background: radial-gradient(
+            1200px 800px at 20% 10%,
+            var(--bg-2),
+            transparent 60%
+          ),
+          radial-gradient(900px 900px at 80% 90%, #0b0d12, transparent 50%),
+          linear-gradient(180deg, var(--bg-1), #0b0d12 70%);
+        background-attachment: fixed;
+      }
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 6rem 1.25rem 3rem;
+      }
+
+      header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      header h1 {
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      header .sub {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      /* Hero / quote panel */
+      .hero {
+        margin-top: 2.5rem;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2rem;
+      }
+      .hero h2 {
+        margin: 0 0 0.5rem 0;
+        font-weight: 600;
+      }
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .quote-card {
+        border: 1px solid rgba(229, 231, 235, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        padding: 1.25rem 1.5rem;
+        backdrop-filter: blur(6px);
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .quote-text {
+        font-size: clamp(1.25rem, 1.2rem + 0.8vw, 1.8rem);
+        line-height: 1.35;
+      }
+      .quote-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .quote-source {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .quote-controls {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-self: start;
+      }
+      .btn {
+        border: 1px solid rgba(229, 231, 235, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--accent);
+        padding: 0.6rem 0.9rem;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: transform 120ms ease, background 120ms ease;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .btn[aria-pressed="true"] {
+        background: rgba(139, 92, 246, 0.18);
+        border-color: rgba(139, 92, 246, 0.35);
+      }
+      .btn.primary {
+        background: #8b5cf6;
+        color: #0b0d12;
+        border-color: #8b5cf6;
+      }
+      .btn.primary:hover {
+        background: #7c3aed;
+      }
+
+      /* Countdown bar */
+      #countdown-wrap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      #countdown-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--bar);
+        transition: width 1s linear;
+      }
+
+      /* Fullscreen overlay messages */
+      #fs-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        place-items: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      #fs-overlay.active {
+        display: grid;
+      }
+      .fs-card {
+        max-width: 680px;
+        background: rgba(15, 17, 21, 0.7);
+        border: 1px solid rgba(229, 231, 235, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+      }
+      .fs-card h2 {
+        margin-top: 0;
+      }
+      .hidden {
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 920px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" role="main">
+      <header>
+        <div>
+          <h1>The Reading Room</h1>
+          <div class="sub">In the right mood, music becomes ink’s echo.</div>
+        </div>
+        <div class="controls" aria-label="Controls">
+          <button id="focusModeBtn" class="btn primary">Focus mode</button>
+          <button
+            id="timerBtn"
+            class="btn"
+            aria-pressed="false"
+            aria-controls="countdown-wrap"
+          >
+            30‑min timer
+          </button>
+          <button id="fsBtn" class="btn" aria-pressed="false">
+            Fullscreen
+          </button>
+          <button id="musicBtn" class="btn" aria-pressed="false">Audio</button>
+        </div>
+      </header>
+
+      <section class="hero" aria-labelledby="quoteHeading">
+        <div class="quote-card" id="quoteCard">
+          <div>
+            <h2 id="quoteHeading">Today’s line</h2>
+            <div class="quote-text" id="quoteText">
+              Some loops don’t distract — they draw you further into the page.
+            </div>
+          </div>
+          <div class="quote-meta">
+            <div class="quote-source" id="quoteSource">— Reading Room</div>
+            <div class="quote-controls">
+              <button class="btn" id="prevQuoteBtn" title="Previous">
+                Prev
+              </button>
+              <button class="btn" id="nextQuoteBtn" title="Next">Next</button>
+              <button
+                class="btn"
+                id="rotateToggleBtn"
+                aria-pressed="false"
+                title="Auto‑rotate quotes"
+              >
+                Auto
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2>About</h2>
+          <p>
+            Enter a calm space for reading. Keep it plain. Or add a single line
+            to set the mood. You choose: audio, fullscreen, timer — together or
+            separate.
+          </p>
+          <ul>
+            <li>
+              <strong>Focus mode</strong> turns on fullscreen, starts the
+              30‑minute timer, and enables audio.
+            </li>
+            <li>Or control each toggle individually from the header.</li>
+            <li>
+              Quotes can stay fixed for the day or auto‑rotate on a schedule.
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Timer bar -->
+    <div
+      id="countdown-wrap"
+      aria-hidden="true"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="1800"
+      aria-valuenow="0"
+    >
+      <div id="countdown-bar"></div>
+    </div>
+
+    <!-- Fullscreen overlay messages -->
+    <div id="fs-overlay" aria-live="polite">
+      <div class="fs-card">
+        <h2 id="fsTitle">Create less distraction.</h2>
+        <p id="fsBody">Just read. 30 minutes begin now…</p>
+        <div id="postTimer" class="hidden">
+          <p>You did it. Take a breath.</p>
+          <button class="btn" id="restartBtn">Go another 30?</button>
+        </div>
+        <div style="margin-top: 1rem">
+          <button class="btn" id="exitFsBtn">Exit fullscreen</button>
+        </div>
+      </div>
+    </div>
+
+    <audio
+      id="bgMusic"
+      src="/assets/loops/loops-between-pages.mp3"
+      preload="none"
+      loop
+    ></audio>
+
+    <script>
+      // ------- State machine
+      const state = { music: false, timer: false, fullscreen: false };
+
+      // ------- Elements
+      const musicEl = document.getElementById("bgMusic");
+      const focusBtn = document.getElementById("focusModeBtn");
+      const timerBtn = document.getElementById("timerBtn");
+      const fsBtn = document.getElementById("fsBtn");
+      const musicBtn = document.getElementById("musicBtn");
+      const barWrap = document.getElementById("countdown-wrap");
+      const bar = document.getElementById("countdown-bar");
+      const fsOverlay = document.getElementById("fs-overlay");
+      const postTimer = document.getElementById("postTimer");
+      const restartBtn = document.getElementById("restartBtn");
+      const exitFsBtn = document.getElementById("exitFsBtn");
+
+      // Quotes
+      const quoteText = document.getElementById("quoteText");
+      const quoteSource = document.getElementById("quoteSource");
+      const prevQ = document.getElementById("prevQuoteBtn");
+      const nextQ = document.getElementById("nextQuoteBtn");
+      const rotateToggle = document.getElementById("rotateToggleBtn");
+
+      // ------- Timer logic
+      let timerSeconds = 0; // counts up to 1800
+      let timerInt = null;
+      const DURATION = 30 * 60; // 30 minutes
+
+      function updateBar() {
+        const pct = Math.min(100, (timerSeconds / DURATION) * 100);
+        bar.style.width = pct + "%";
+        barWrap.setAttribute("aria-valuenow", timerSeconds);
+      }
+      function startTimer() {
+        if (state.timer) return;
+        state.timer = true;
+        timerBtn.setAttribute("aria-pressed", "true");
+        barWrap.setAttribute("aria-hidden", "false");
+        fsOverlay.classList.add("active");
+        postTimer.classList.add("hidden");
+        timerSeconds = 0;
+        updateBar();
+        clearInterval(timerInt);
+        timerInt = setInterval(() => {
+          timerSeconds++;
+          updateBar();
+          if (timerSeconds >= DURATION) {
+            clearInterval(timerInt);
+            state.timer = false;
+            timerBtn.setAttribute("aria-pressed", "false");
+            postTimer.classList.remove("hidden");
+          }
+        }, 1000);
+      }
+      function stopTimer() {
+        state.timer = false;
+        timerBtn.setAttribute("aria-pressed", "false");
+        clearInterval(timerInt);
+        timerInt = null;
+        timerSeconds = 0;
+        updateBar();
+        barWrap.setAttribute("aria-hidden", "true");
+      }
+
+      // ------- Fullscreen logic
+      async function enterFullscreen() {
+        if (document.fullscreenElement) return;
+        const el = document.documentElement;
+        try {
+          await el.requestFullscreen();
+        } catch (e) {
+          /* ignore */
+        }
+        state.fullscreen = true;
+        fsBtn.setAttribute("aria-pressed", "true");
+        fsOverlay.classList.add("active");
+      }
+      async function exitFullscreen() {
+        if (document.fullscreenElement) {
+          try {
+            await document.exitFullscreen();
+          } catch (e) {}
+        }
+        state.fullscreen = false;
+        fsBtn.setAttribute("aria-pressed", "false");
+        fsOverlay.classList.remove("active");
+      }
+
+      // ------- Audio logic (must be user-initiated)
+      async function enableMusic() {
+        if (state.music) return;
+        try {
+          await musicEl.play();
+          state.music = true;
+          musicBtn.setAttribute("aria-pressed", "true");
+        } catch (e) {
+          /* autoplay blocked until further gesture */
+        }
+      }
+      function disableMusic() {
+        state.music = false;
+        musicBtn.setAttribute("aria-pressed", "false");
+        musicEl.pause();
+      }
+
+      // Combined Focus Mode: fullscreen + timer + audio
+      async function focusMode() {
+        await enterFullscreen();
+        startTimer();
+        await enableMusic();
+      }
+
+      // Controls wiring
+      focusBtn.addEventListener("click", focusMode);
+      timerBtn.addEventListener("click", () =>
+        state.timer ? stopTimer() : startTimer()
+      );
+      fsBtn.addEventListener("click", () =>
+        state.fullscreen ? exitFullscreen() : enterFullscreen()
+      );
+      musicBtn.addEventListener("click", () =>
+        state.music ? disableMusic() : enableMusic()
+      );
+      restartBtn.addEventListener("click", () => {
+        startTimer();
+      });
+      exitFsBtn.addEventListener("click", () => {
+        exitFullscreen();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") exitFullscreen();
+      });
+
+      // ------- Quote system
+      const QUOTES = [
+        {
+          t: "Some loops don’t distract — they draw you further into the page.",
+          s: "Reading Room",
+        },
+        { t: "We hollowed books once; now we hollow time.", s: "HollowBookCo" },
+        { t: "Begin anywhere, but begin.", s: "Notes to Self" },
+        { t: "Ink remembers what the mind misplaces.", s: "Library Loops" },
+        { t: "Silence is a color you can read in.", s: "StudioRich" },
+      ];
+
+      let qIndex = 0;
+      let rotateInt = null;
+
+      function loadQuote(i) {
+        const q = QUOTES[((i % QUOTES.length) + QUOTES.length) % QUOTES.length];
+        quoteText.textContent = q.t;
+        quoteSource.textContent = "— " + q.s;
+      }
+
+      function todaysIndex() {
+        const seed = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        let hash = 0;
+        for (let i = 0; i < seed.length; i++) {
+          hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+        }
+        return hash % QUOTES.length;
+      }
+
+      function setDailyQuote() {
+        qIndex = todaysIndex();
+        loadQuote(qIndex);
+      }
+
+      function startRotation(intervalMs = 12 * 60 * 1000) {
+        // default ~12 minutes
+        rotateToggle.setAttribute("aria-pressed", "true");
+        clearInterval(rotateInt);
+        rotateInt = setInterval(() => {
+          qIndex = (qIndex + 1) % QUOTES.length;
+          loadQuote(qIndex);
+        }, intervalMs);
+      }
+      function stopRotation() {
+        rotateToggle.setAttribute("aria-pressed", "false");
+        clearInterval(rotateInt);
+        rotateInt = null;
+      }
+
+      // Quote controls
+      prevQ.addEventListener("click", () => {
+        qIndex--;
+        loadQuote(qIndex);
+        stopRotation();
+      });
+      nextQ.addEventListener("click", () => {
+        qIndex++;
+        loadQuote(qIndex);
+        stopRotation();
+      });
+      rotateToggle.addEventListener("click", () => {
+        rotateInt ? stopRotation() : startRotation();
+      });
+
+      // Pause auto-rotate when tab hidden
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && rotateInt) {
+          clearInterval(rotateInt);
+        } else if (
+          !document.hidden &&
+          rotateToggle.getAttribute("aria-pressed") === "true" &&
+          !rotateInt
+        ) {
+          startRotation();
+        }
+      });
+
+      // Init
+      setDailyQuote();
+      updateBar();
+
+      // Optional: adapt gradient subtly per quote index
+      function setGradientByIndex(i) {
+        const hues = [250, 210, 180, 320, 140];
+        const h = hues[i % hues.length];
+        document.documentElement.style.setProperty(
+          "--bg-1",
+          `hsl(${h} 28% 9%)`
+        );
+        document.documentElement.style.setProperty(
+          "--bg-2",
+          `hsl(${(h + 30) % 360} 24% 14%)`
+        );
+      }
+      setGradientByIndex(qIndex);
+      const _oldLoadQuote = loadQuote;
+      loadQuote = function (i) {
+        _oldLoadQuote(i);
+        setGradientByIndex(i);
+      };
+    </script>
+  </body>
+</html>

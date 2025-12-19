@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reading Room — Focus + Quotes</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=IBM+Plex+Mono:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text: #e8eaed;
+        --muted: #aab1bb;
+        --accent: #8b5cf6;
+        --bg1: #0f1115;
+        --bg2: #141824;
+        --bg3: #0b0d12; /* will animate */
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: Inter, system-ui, sans-serif;
+        background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3));
+        background-size: 400% 400%;
+        animation: gradientShift 28s ease-in-out infinite;
+      }
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 4rem 1.25rem 6rem;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      header h1 {
+        margin: 0;
+        font-weight: 600;
+      }
+      header .sub {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      /* Icon buttons */
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        padding: 0.55rem 0.8rem;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.12s ease;
+      }
+      .btn svg {
+        width: 18px;
+        height: 18px;
+        opacity: 0.9;
+      }
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+      }
+      .btn[aria-pressed="true"] {
+        background: rgba(139, 92, 246, 0.18);
+        border-color: rgba(139, 92, 246, 0.35);
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: #0b0d12;
+        border-color: var(--accent);
+      }
+
+      /* Layout */
+      .grid {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2rem;
+      }
+      @media (max-width: 920px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Quote card */
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 22px;
+        padding: 1.25rem 1.5rem;
+        backdrop-filter: blur(6px);
+      }
+      .quote-text {
+        font-size: clamp(1.25rem, 1.1rem + 1vw, 1.9rem);
+        line-height: 1.35;
+      }
+      .quote-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        gap: 0.75rem;
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      /* Pack selector */
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      select,
+      input[type="number"] {
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 10px;
+        padding: 0.45rem 0.6rem;
+      }
+
+      /* Timer bar + big timer */
+      #countdown-wrap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      #countdown-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 1s linear;
+      }
+      #bigTimer {
+        position: fixed;
+        top: 20px;
+        right: 28px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-weight: 300;
+        font-size: 3.25rem;
+        letter-spacing: 0.02em;
+        display: none;
+        z-index: 20;
+      }
+
+      /* Fullscreen overlay */
+      #fs-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        place-items: center;
+        text-align: center;
+        padding: 2rem;
+        z-index: 15;
+      }
+      #fs-overlay.active {
+        display: grid;
+      }
+      .fs-card {
+        max-width: 720px;
+        background: rgba(10, 12, 16, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+        padding: 2rem;
+        animation: fadeIn 0.4s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Fade-hide nonessential during focus */
+      .faded {
+        opacity: 0.07;
+        pointer-events: none;
+        filter: blur(1px);
+        transition: opacity 0.35s ease, filter 0.35s ease;
+      }
+
+      /* Minimal footer space to breathe */
+      footer {
+        height: 48vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="top">
+      <header>
+        <div>
+          <h1>The Reading Room</h1>
+          <div class="sub">In the right mood, music becomes ink’s echo.</div>
+        </div>
+        <div class="controls" aria-label="Controls">
+          <button
+            id="focusBtn"
+            class="btn primary"
+            title="Focus mode (Fullscreen + Timer + Audio)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M4 4h6v2H6v4H4V4m10 0h6v6h-2V6h-4V4M4 14h2v4h4v2H4v-6m14 0h2v6h-6v-2h4v-4Z"
+              />
+            </svg>
+            Focus
+          </button>
+          <button
+            id="timerBtn"
+            class="btn"
+            aria-pressed="false"
+            title="Start/stop timer"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M15 1H9v2h6V1m-3 4a8 8 0 1 0 .001 16.001A8 8 0 0 0 12 5m0 2a6 6 0 1 1 0 12A6 6 0 0 1 12 7m-.5 2h1v5l4 2-.5.87L11.5 14V9Z"
+              />
+            </svg>
+            Timer
+          </button>
+          <button
+            id="fsBtn"
+            class="btn"
+            aria-pressed="false"
+            title="Toggle fullscreen"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M4 4h6v2H6v4H4V4m10 0h6v6h-2V6h-4V4M4 14h2v4h4v2H4v-6m14 0h2v6h-6v-2h4v-4Z"
+              />
+            </svg>
+            Fullscreen
+          </button>
+          <button
+            id="audioBtn"
+            class="btn"
+            aria-pressed="false"
+            title="Play/pause audio"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M14 3.23v17.54c0 .62-.66 1-.12.64L8 17H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h4l5.88-4.41C13.34 2.23 14 2.61 14 3.23M19 12a3 3 0 0 1-3 3v-6a3 3 0 0 1 3 3Z"
+              />
+            </svg>
+            Audio
+          </button>
+        </div>
+      </header>
+
+      <section class="grid" id="mainGrid">
+        <div class="card" id="quoteCard">
+          <div
+            class="row"
+            style="
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <div class="row">
+              <label for="packSel" class="muted">Quote pack</label>
+              <select id="packSel" aria-label="Choose quote pack">
+                <option value="hollow">HollowBookCo</option>
+                <option value="studiorich">StudioRich</option>
+                <option value="science">Reading science</option>
+              </select>
+            </div>
+            <div class="row">
+              <button class="btn" id="prevQuote" title="Previous quote">
+                ◀
+              </button>
+              <button class="btn" id="nextQuote" title="Next quote">▶</button>
+              <button
+                class="btn"
+                id="rotateBtn"
+                aria-pressed="false"
+                title="Auto‑rotate quotes"
+              >
+                Auto
+              </button>
+            </div>
+          </div>
+          <div class="quote-text" id="quoteText">
+            Some loops don’t distract — they draw you further into the page.
+          </div>
+          <div class="quote-meta">
+            <div class="muted" id="quoteSource">— Reading Room</div>
+            <div class="muted" id="quoteIndex">1/1</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top: 0">Session</h3>
+          <div class="row" style="margin-bottom: 0.5rem">
+            <span class="muted">Preset:</span>
+            <button class="btn" data-preset="15">15m</button>
+            <button class="btn" data-preset="25">25m</button>
+            <button class="btn" data-preset="30">30m</button>
+            <button class="btn" data-preset="45">45m</button>
+            <label class="muted" style="margin-left: 0.5rem">Custom</label>
+            <input
+              type="number"
+              id="customMinutes"
+              min="1"
+              max="180"
+              value="30"
+              aria-label="Custom minutes"
+              style="width: 80px"
+            />
+          </div>
+          <div class="row">
+            <span class="muted">Extend:</span>
+            <button class="btn" id="add5">+5m</button>
+            <button class="btn" id="add10">+10m</button>
+          </div>
+          <p class="muted" style="margin-top: 1rem">
+            Focus mode hides UI and shows a large timer. Toggle features
+            separately if you prefer.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Big timer & progress -->
+    <div id="bigTimer">30:00</div>
+    <div
+      id="countdown-wrap"
+      aria-hidden="true"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="1800"
+      aria-valuenow="0"
+    >
+      <div id="countdown-bar"></div>
+    </div>
+
+    <!-- Fullscreen minimal overlay -->
+    <div id="fs-overlay" aria-live="polite">
+      <div class="fs-card" id="fsCard">
+        <h2 id="fsTitle" style="margin: 0.2rem 0 0.5rem">
+          Create less distraction.
+        </h2>
+        <p id="fsBody" class="muted" style="margin: 0 0 1rem">
+          Just read. Your session begins now…
+        </p>
+        <div class="row" style="justify-content: center; gap: 0.75rem">
+          <button class="btn" id="exitFs">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <audio
+      id="bgMusic"
+      src="/assets/loops/loops-between-pages.mp3"
+      preload="none"
+      loop
+    ></audio>
+
+    <script>
+      // ---------- Utilities
+      const $ = (sel) => document.querySelector(sel);
+      const params = new URLSearchParams(location.search);
+      function setParam(k, v) {
+        params.set(k, v);
+        history.replaceState(null, "", "?" + params.toString());
+      }
+
+      // ---------- State
+      const state = {
+        music: false,
+        timer: false,
+        fullscreen: false,
+        durationMin: parseInt(params.get("duration") || "30", 10),
+        secondsLeft: 0,
+        pack: "hollow",
+        rotate: false,
+        rotateMs: parseInt(params.get("interval") || "12", 10) * 60 * 1000,
+      };
+
+      // ---------- Elements
+      const focusBtn = $("#focusBtn");
+      const timerBtn = $("#timerBtn");
+      const fsBtn = $("#fsBtn");
+      const audioBtn = $("#audioBtn");
+      const bigTimer = $("#bigTimer");
+      const barWrap = $("#countdown-wrap");
+      const bar = $("#countdown-bar");
+      const fsOverlay = $("#fs-overlay");
+      const mainGrid = $("#mainGrid");
+      const musicEl = $("#bgMusic");
+      const packSel = $("#packSel");
+      const qText = $("#quoteText");
+      const qSource = $("#quoteSource");
+      const qIndexEl = $("#quoteIndex");
+
+      const prevQuoteBtn = $("#prevQuote");
+      const nextQuoteBtn = $("#nextQuote");
+      const rotateBtn = $("#rotateBtn");
+
+      // Timer controls
+      const customMinutes = $("#customMinutes");
+      const add5 = $("#add5");
+      const add10 = $("#add10");
+      document.querySelectorAll("[data-preset]").forEach((b) =>
+        b.addEventListener("click", () => {
+          setDuration(parseInt(b.dataset.preset, 10));
+        })
+      );
+
+      // ---------- Quotes: packs via JSON with inline fallback
+      const INLINE_PACKS = {
+        hollow: [
+          {
+            t: "We hollowed books once; now we hollow time.",
+            s: "HollowBookCo",
+          },
+          { t: "Begin anywhere, but begin.", s: "Notes to Self" },
+          { t: "Ink remembers what the mind misplaces.", s: "Library Loops" },
+        ],
+        studiorich: [
+          {
+            t: "Some loops don’t distract — they draw you further into the page.",
+            s: "Reading Room",
+          },
+          {
+            t: "Let the drums breathe; let the words arrive.",
+            s: "StudioRich",
+          },
+          { t: "Mood is a metronome.", s: "Studio Notes" },
+        ],
+        science: [
+          {
+            t: "Instrumental, enjoyed, moderate volume often aids reading; lyrics add load.",
+            s: "Reading research",
+          },
+          {
+            t: "Silence isn’t the only ideal backdrop anymore.",
+            s: "Library UX",
+          },
+          {
+            t: "Preferred music can lift focus via mood.",
+            s: "Cognitive studies",
+          },
+        ],
+      };
+
+      let QUOTES = [];
+      let qIndex = 0;
+      let rotateInt = null;
+
+      async function loadPack(name) {
+        state.pack = name;
+        setParam("pack", name);
+        QUOTES = [];
+        // Try external JSON first
+        try {
+          const res = await fetch(`/assets/quotes/${name}.json`, {
+            cache: "no-store",
+          });
+          if (res.ok) {
+            QUOTES = await res.json();
+          }
+        } catch (e) {
+          /* ignore and fall back */
+        }
+        if (!Array.isArray(QUOTES) || !QUOTES.length) {
+          QUOTES = INLINE_PACKS[name] || INLINE_PACKS.hollow;
+        }
+        // Start index
+        const qParam = parseInt(params.get("q") || "0", 10);
+        qIndex = Number.isFinite(qParam)
+          ? Math.max(0, Math.min(QUOTES.length - 1, qParam))
+          : 0;
+        renderQuote();
+        updateQuoteCount();
+      }
+
+      function updateQuoteCount() {
+        qIndexEl.textContent = `${qIndex + 1}/${QUOTES.length}`;
+      }
+
+      function renderQuote() {
+        const q = QUOTES[qIndex];
+        if (!q) return;
+        qText.textContent = q.t;
+        qSource.textContent = "— " + q.s;
+        setParam("q", qIndex);
+        // Subtle gradient tint per quote index
+        const hues = [250, 210, 180, 320, 140, 30];
+        const h = hues[qIndex % hues.length];
+        document.documentElement.style.setProperty("--bg1", `hsl(${h} 28% 9%)`);
+        document.documentElement.style.setProperty(
+          "--bg2",
+          `hsl(${(h + 24) % 360} 24% 14%)`
+        );
+        document.documentElement.style.setProperty(
+          "--bg3",
+          `hsl(${(h + 48) % 360} 22% 11%)`
+        );
+      }
+
+      prevQuoteBtn.addEventListener("click", () => {
+        qIndex = (qIndex - 1 + QUOTES.length) % QUOTES.length;
+        renderQuote();
+        updateQuoteCount();
+        stopRotation();
+      });
+      nextQuoteBtn.addEventListener("click", () => {
+        qIndex = (qIndex + 1) % QUOTES.length;
+        renderQuote();
+        updateQuoteCount();
+        stopRotation();
+      });
+
+      function startRotation() {
+        if (rotateInt) return;
+        rotateInt = setInterval(() => {
+          qIndex = (qIndex + 1) % QUOTES.length;
+          renderQuote();
+          updateQuoteCount();
+        }, state.rotateMs);
+        rotateBtn.setAttribute("aria-pressed", "true");
+        setParam("rotate", "1");
+      }
+      function stopRotation() {
+        clearInterval(rotateInt);
+        rotateInt = null;
+        rotateBtn.setAttribute("aria-pressed", "false");
+        setParam("rotate", "0");
+      }
+      rotateBtn.addEventListener("click", () => {
+        rotateInt ? stopRotation() : startRotation();
+      });
+
+      // ---------- Timer
+      let timerInt = null;
+      function setDuration(mins) {
+        state.durationMin = mins;
+        customMinutes.value = String(mins);
+        setParam("duration", String(mins));
+        if (!state.timer) {
+          bigTimer.textContent = fmt(mins * 60);
+        }
+      }
+      function fmt(s) {
+        const m = Math.floor(s / 60),
+          sec = s % 60;
+        return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+      }
+      function updateBar() {
+        const total = state.durationMin * 60;
+        const pct = Math.min(100, ((total - state.secondsLeft) / total) * 100);
+        bar.style.width = pct + "%";
+        barWrap.setAttribute("aria-valuenow", total - state.secondsLeft);
+      }
+
+      function startTimer() {
+        if (state.timer) return;
+        state.timer = true;
+        timerBtn.setAttribute("aria-pressed", "true");
+        barWrap.setAttribute("aria-hidden", "false");
+        state.secondsLeft = state.durationMin * 60;
+        bigTimer.style.display = "block";
+        clearInterval(timerInt);
+        timerInt = setInterval(() => {
+          bigTimer.textContent = fmt(state.secondsLeft);
+          updateBar();
+          state.secondsLeft--;
+          if (state.secondsLeft < 0) {
+            clearInterval(timerInt);
+            state.timer = false;
+            timerBtn.setAttribute("aria-pressed", "false");
+          }
+        }, 1000);
+      }
+      function stopTimer() {
+        state.timer = false;
+        timerBtn.setAttribute("aria-pressed", "false");
+        clearInterval(timerInt);
+        bar.style.width = "0%";
+        barWrap.setAttribute("aria-hidden", "true");
+        bigTimer.style.display = "none";
+      }
+
+      // Extend while running
+      add5.addEventListener("click", () => {
+        if (state.timer) {
+          state.secondsLeft += 5 * 60;
+          bigTimer.textContent = fmt(state.secondsLeft);
+        }
+      });
+      add10.addEventListener("click", () => {
+        if (state.timer) {
+          state.secondsLeft += 10 * 60;
+          bigTimer.textContent = fmt(state.secondsLeft);
+        }
+      });
+      customMinutes.addEventListener("change", () => {
+        const v = Math.max(
+          1,
+          Math.min(180, parseInt(customMinutes.value || "30", 10))
+        );
+        setDuration(v);
+        if (state.timer) {
+          /* keep running with new total proportionally? keep simple: apply next session */
+        }
+      });
+
+      // ---------- Fullscreen + Audio
+      async function enterFs() {
+        if (!document.fullscreenElement) {
+          try {
+            await document.documentElement.requestFullscreen();
+          } catch (e) {}
+        }
+        state.fullscreen = true;
+        fsBtn.setAttribute("aria-pressed", "true");
+        fsOverlay.classList.add("active");
+        fadeNonessential(true);
+      }
+      async function exitFs() {
+        if (document.fullscreenElement) {
+          try {
+            await document.exitFullscreen();
+          } catch (e) {}
+        }
+        state.fullscreen = false;
+        fsBtn.setAttribute("aria-pressed", "false");
+        fsOverlay.classList.remove("active");
+        fadeNonessential(false);
+      }
+      function fadeNonessential(v) {
+        if (v) {
+          mainGrid.classList.add("faded");
+          $("#top header").classList.add("faded");
+        } else {
+          mainGrid.classList.remove("faded");
+          $("#top header").classList.remove("faded");
+        }
+      }
+
+      async function playAudio() {
+        try {
+          await musicEl.play();
+          state.music = true;
+          audioBtn.setAttribute("aria-pressed", "true");
+        } catch (e) {}
+      }
+      function pauseAudio() {
+        musicEl.pause();
+        state.music = false;
+        audioBtn.setAttribute("aria-pressed", "false");
+      }
+
+      // Focus mode
+      async function focusMode() {
+        await enterFs();
+        setDuration(state.durationMin);
+        startTimer();
+        await playAudio();
+      }
+
+      // Wire controls
+      focusBtn.addEventListener("click", focusMode);
+      timerBtn.addEventListener("click", () =>
+        state.timer ? stopTimer() : startTimer()
+      );
+      fsBtn.addEventListener("click", () =>
+        state.fullscreen ? exitFs() : enterFs()
+      );
+      audioBtn.addEventListener("click", () =>
+        state.music ? pauseAudio() : playAudio()
+      );
+      $("#exitFs").addEventListener("click", () => exitFs());
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "f" || e.key === "F")
+          state.fullscreen ? exitFs() : enterFs();
+        if (e.key === "t" || e.key === "T")
+          state.timer ? stopTimer() : startTimer();
+        if (e.key === "m" || e.key === "M")
+          state.music ? pauseAudio() : playAudio();
+        if (e.key === "ArrowLeft") prevQuoteBtn.click();
+        if (e.key === "ArrowRight") nextQuoteBtn.click();
+        if (e.key === "Escape") exitFs();
+      });
+
+      // ---------- Init from URL
+      (async function init() {
+        // Pack
+        const p = params.get("pack");
+        if (p) packSel.value = p;
+        await loadPack(packSel.value);
+        packSel.addEventListener("change", async () => {
+          await loadPack(packSel.value);
+        });
+
+        // Quote index override
+        const qParam = params.get("q");
+        if (qParam) {
+          const i = parseInt(qParam, 10);
+          if (Number.isFinite(i)) {
+            qIndex = Math.max(0, Math.min(QUOTES.length - 1, i));
+            renderQuote();
+            updateQuoteCount();
+          }
+        }
+
+        // Rotate
+        const r = params.get("rotate");
+        if (r === "1") {
+          startRotation();
+        }
+
+        // Duration
+        setDuration(state.durationMin);
+
+        // Auto actions
+        if (params.get("autostart") === "1") {
+          focusMode();
+        }
+      })();
+
+      // Pause rotation when tab hidden
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && rotateInt) {
+          clearInterval(rotateInt);
+        } else if (
+          !document.hidden &&
+          params.get("rotate") === "1" &&
+          !rotateInt
+        ) {
+          startRotation();
+        }
+      });
+    </script>
+  </body>
+</html>

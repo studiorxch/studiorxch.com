@@ -1,0 +1,31 @@
+{
+  "title": "Soft Revival",
+  "description": "A tranquil palette of lo-fi warmth — where calm meets quiet hope.",
+  "moods": [
+    {
+      "name": "Comforting",
+      "color": "#FFC09F",
+      "audio": "/assets/media/audio/041_Comforting.m4a"
+    },
+    {
+      "name": "Joyful",
+      "color": "#FFEE93",
+      "audio": "/assets/media/audio/018_Joyful.m4a"
+    },
+    {
+      "name": "Hopeful",
+      "color": "#FCF5C7",
+      "audio": "/assets/media/audio/043_Hopeful.m4a"
+    },
+    {
+      "name": "Weightless",
+      "color": "#A0CED9",
+      "audio": "/assets/media/audio/226_Weightless.m4a"
+    },
+    {
+      "name": "Calm",
+      "color": "#ADF7B6",
+      "audio": "/assets/media/audio/085_Calm.m4a"
+    }
+  ]
+}

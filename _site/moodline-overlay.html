@@ -1,0 +1,61 @@
+<!-- _layouts/overlay.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="/assets/css/overlay.css" />
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <!-- Motion Engine -->
+    <script type="module">
+      import { MotionEngine } from "/assets/js/studiorich-motion.js";
+
+      window.addEventListener("message", (event) => {
+        const t = event?.data?.track;
+        if (!t) return;
+
+        // TEXT
+        document.getElementById("track-title").textContent = t.title ?? "";
+        document.getElementById("track-variant").textContent = t.variant ?? "";
+
+        // COLOR — bottom line
+        if (t.colorA) MotionEngine.setColors(t.colorA);
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="overlay-root">
+
+  <!-- BOTTOM MOODLINE -->
+  <div id="moodbar-layer">
+    <svg id="moodline" width="100%" height="120" viewBox="0 0 1000 120" preserveAspectRatio="none">
+  
+      &lt;path id="mood-wave"
+        d="M 0 60 Q 250 60 500 60 T 1000 60"
+        stroke="#ffffff"        <!-- MotionEngine overwrites -->
+        stroke-width="20"
+        fill="none"
+        stroke-linecap="round"
+      /&gt;
+  
+    </svg>
+  </div>
+
+  <!-- TRACK INFO -->
+  <div id="info-layer">
+    <p id="nowplaying-label">Now Playing</p>
+    <div id="track-line">
+      <span id="track-title"></span>
+      <span id="track-variant" class="variant-pill"></span>
+    </div>
+  </div>
+
+</div>
+
+  </body>
+</html>

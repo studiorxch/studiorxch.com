@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>StudioRich Control Room</title>
+    <link rel="stylesheet" href="/radio/controller.css" />
+    <link rel="icon" href="/assets/img/logos/favicon.ico" type="image/x-icon" />
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+    <script>
+      const PASS = "(123)";
+
+      const ok = sessionStorage.getItem("studioAuth") === PASS;
+      if (!ok) {
+        const p = prompt("StudioRich Access — Enter Password:");
+        if (p !== PASS) {
+          location.href = "/";
+        } else {
+          sessionStorage.setItem("studioAuth", PASS);
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="studio-wrapper">
+      <section class="left">
+        <h2>Now Playing</h2>
+
+        <div class="np-row">
+          <label>Title:</label> <span id="np-title">—</span>
+        </div>
+        <div id="np-meta">
+          <div id="np-moodCapsule" class="capsule">—</div>
+
+          <div id="np-badges">
+            <div id="np-bpm-badge" class="np-badge">—</div>
+            <div id="np-key-badge" class="np-badge">—</div>
+          </div>
+        </div>
+
+        <img id="np-cover" src="" alt="Cover" class="cover" />
+
+        <div class="btns">
+          <button id="btn-start">Start</button>
+          <button id="btn-next">Next</button>
+          <button id="btn-stop">Stop</button>
+        </div>
+      </section>
+
+      <section class="right">
+        <h2>OBS Preview</h2>
+        <video id="preview" class="preview" autoplay muted playsinline></video>
+
+        <h2>Log</h2>
+        <div id="log" class="log"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/radio/global-stream.js"></script>
+    <script type="module" src="/radio/controller.js"></script>
+  </body>
+</html>
