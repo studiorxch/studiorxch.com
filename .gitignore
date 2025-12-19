@@ -1,0 +1,98 @@
+# =====================================================
+#  StudioRich.shop — .gitignore (Clean & Safe)
+# =====================================================
+
+# 🔧 Jekyll Output
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.history/
+
+# 🧠 Temp / Cache
+.sass-cache/
+*.log
+*.tmp
+
+# 💻 OS Files
+.DS_Store
+._*
+Thumbs.db
+
+# 🧱 Ruby / Bundler
+vendor/
+.bundle/
+
+# 🧩 Environment / Secrets
+.env
+.env.*
+*.env
+.env.txt
+
+# 🧩 Node (future)
+node_modules/
+package.json
+package-lock.json
+
+# 🧰 Local Dev
+_dev/
+_docs/
+_archives/
+snippets/
+admin/
+.obsidian/
+**/.obsidian/
+
+# README
+assets/js/README.md
+
+# 🗂️ Draft / Ghost / Backup
+*--bak/
+*--ghost/
+trash--ghost
+_stations--bak
+_dev-ghost
+_visualizer-ghost
+_playground-unpublished--ghost
+_albums--ghost
+
+# 🎵 Media
+archive/
+assets/media/unreleased/
+assets/archive/
+assets/trash/
+_tracks.zip
+_tracks/_unreleased/
+_album/_unreleased/
+
+# 🧾 Scripts
+_scripts/
+generate_library_yml.py
+generate_product_redirects.py
+blog-automator-*.json
+_data/articles/*.csv
+
+# 🧩 Archives
+*.zip
+
+# 🪶 CSS
+css/main.css
+css/unused.css
+
+# 🚫 Legacy
+_blog/_bak
+sitemap.xml
+
+# 🟦 Local Netlify environment
+.netlify
+.netlify/
+
+# Python virtual env
+venv/
+*/venv/
+scripts/venv/.env.txt
+
+
+# Private Twitch Secrets (local only)
+netlify/functions/.twitch-secrets.json
+
+
